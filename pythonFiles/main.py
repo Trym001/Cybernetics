@@ -3,7 +3,7 @@ import time
 from socket import *
 import numpy as np
 
-from pythonFiles.internealLibrary.sensorFusion import Fusion
+from pythonFiles.internealLibrary.kalman_filter import KF
 
 udp_socket = socket(AF_INET, SOCK_DGRAM)
 udp_socket.settimeout(1)
@@ -14,7 +14,8 @@ arduino_ip = '192.168.10.240'
 arduino_port = 8888
 
 # En klasse som håndterer sensor fusion og bygger matrisene som brukes i Kalman filteret. KF er implementert som en egen klasse. Disse to må dere implementere selv
-f = Fusion()
+#f = Fusion()
+KF = KF(initial_x=0.0, initial_v=0.0, accel_variance= 0.01)
 
 reset = True
 previous_time = datetime.datetime.now()
@@ -29,7 +30,7 @@ def arduino_send_receive(estimate):
     if not reset:
         previous_time = datetime.datetime.now()
 
-    distance = estimate.item((0, 0))
+    distance = KF.mean
     udp_socket.sendto(str(distance).encode(), (arduino_ip, arduino_port))
     try:
         inbound_message, remote_address = udp_socket.recvfrom(24)
@@ -51,12 +52,12 @@ def estimate(measurements):
     previous_time = now
 
     delta_t = diff.total_seconds()
-    f.timestep(delta_t)  # her oppdateres modellmatrisene med hensyn på tidssteget
-    f.processDistance(measurements[3])  # her brukes avstandsmåling for å estimere tilstandene
-    f.processAcceleration(measurements[2])  # her brukes akselerasjon i z-retning for å estimere tilstandene
+    KF.predict(dt=delta_t)
+    KF.update(meas_value=measurements[3], mean_variance=0.002)  # her brukes avstandsmåling for å estimere tilstandene
+    KF.update(meas_value=measurements[2], mean_variance=0.002)  # her brukes akselerasjon i z-retning for å estimere tilstandene
 
-    estimates = f.estimates()
-    log_measurements_and_estimates(delta_t, estimates, measurements)
+    estimates = KF.pos
+    #log_measurements_and_estimates(delta_t, estimates, measurements)
 
     return estimates
 
@@ -76,13 +77,13 @@ def arduino_has_been_reset():
     global reset
     if reset:
         print("Arduino is offline.. Resetting kalman filter")
-        global f
-        f = Fusion()
+        #global f
+        #f = Fusion()
         reset = False
 
 
 while True:
-    sensor_values = arduino_send_receive(f.estimates())
+    sensor_values = arduino_send_receive(KF.pos)
     if sensor_values is not None:
         estimate(sensor_values)
     else:

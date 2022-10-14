@@ -1,3 +1,5 @@
+#include <VL53L0X.h>
+
 #include <HardWire.h>
 #include <VL53L0X.h>
 #include <I2C_MPU6886.h>
