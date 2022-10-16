@@ -13,11 +13,13 @@ class KF:
     def predict(self, dt: float) -> None:
         # x = A x
         # P = A P At + G Gt a
-        A = np.array([[1, dt, dt**2/2], [0, 1, dt], [0, 0, 1]])
+        A = np.array([[1, dt, dt**2/2],
+                      [0, 1, dt],
+                      [0, 0, 1]])
         new_x = A.dot(self._x)
 
         G = np.array([dt**3/6, dt**2/2, dt]).reshape([3, 1])
-        new_P = A.dot(self._P).dot(A.T) + G.dot(G.T)
+        new_P = A.dot(self._P).dot(A.T) + G.dot(G.T) * self._accel_variance
 
         self._P = new_P
         self._x = new_x

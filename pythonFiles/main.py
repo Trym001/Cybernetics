@@ -18,7 +18,7 @@ arduino_port = 8888
 
 # En klasse som håndterer sensor fusion og bygger matrisene som brukes i Kalman filteret. KF er implementert som en egen klasse. Disse to må dere implementere selv
 #f = Fusion()
-KF = KF(initial_x=0.0, initial_v=0.0, initial_a=1, accel_variance= 0.015)
+KF = KF(initial_x=0.0, initial_v=0.0, initial_a=1, accel_variance= 1.9097)
 
 reset = True
 previous_time = datetime.datetime.now()
