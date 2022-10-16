@@ -18,7 +18,7 @@ arduino_port = 8888
 
 # En klasse som håndterer sensor fusion og bygger matrisene som brukes i Kalman filteret. KF er implementert som en egen klasse. Disse to må dere implementere selv
 #f = Fusion()
-KF = KF(initial_x=0.0, initial_v=0.0, initial_a=1, accel_variance= 0.01)
+KF = KF(initial_x=0.0, initial_v=0.0, initial_a=1, accel_variance= 0.015)
 
 reset = True
 previous_time = datetime.datetime.now()
@@ -28,6 +28,8 @@ estimates_log_data = []
 
 empty_array_1 = []
 empty_array_2 = []
+acc_array = []
+acc_array2 = []
 counter = 0
 
 def arduino_send_receive(estimate):
@@ -72,7 +74,7 @@ def log_measurements_and_estimates(delta_t, estimates, measurements):
     sensor_log_data.append([delta_t, measurements[0], measurements[1], measurements[2], measurements[3]])
     estimates_log_data.append([estimates.item(0, 0), estimates.item(1, 0), estimates.item(2, 0)])
 
-    if len(sensor_log_data) > 500:
+    if len(sensor_log_data) > 100:
         np.savetxt('measures.csv', sensor_log_data, delimiter=',')
         np.savetxt('estimates.csv', estimates_log_data, delimiter=',')
         sensor_log_data.clear()
@@ -88,13 +90,15 @@ def arduino_has_been_reset():
         reset = False
 
 
-while counter <= 100:
+while counter < 500:
     #global counter
     sensor_values = arduino_send_receive(KF.pos)
     #print("raw sensor: ", sensor_values[3], " Estimates: ", KF.pos)
     print(sensor_values[3])
     empty_array_1.append(KF.pos)
     empty_array_2.append(sensor_values[3])
+    acc_array.append(KF.acc)
+    acc_array2.append(sensor_values[2])
     # Set up plot to call animate() function periodically
     if sensor_values is not None:
         estimate(sensor_values)
@@ -109,9 +113,12 @@ while counter <= 100:
 
 
 plt.close(0); plt.figure(0)
-
+plt.subplot(2,1,1)
 plt.plot(empty_array_1, 'r')
 plt.plot(empty_array_2, 'b')
+plt.subplot(2,1,2)
+plt.plot(acc_array, 'r')
+plt.plot(acc_array2, 'b')
 
 plt.show()
 
