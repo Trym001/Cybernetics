@@ -2,6 +2,9 @@ import datetime
 import time
 from socket import *
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
 
 from pythonFiles.internealLibrary.kalman_filter import KF
 
@@ -15,7 +18,7 @@ arduino_port = 8888
 
 # En klasse som håndterer sensor fusion og bygger matrisene som brukes i Kalman filteret. KF er implementert som en egen klasse. Disse to må dere implementere selv
 #f = Fusion()
-KF = KF(initial_x=0.0, initial_v=0.0, accel_variance= 0.01)
+KF = KF(initial_x=0.0, initial_v=0.0, initial_a=1, accel_variance= 0.01)
 
 reset = True
 previous_time = datetime.datetime.now()
@@ -23,6 +26,9 @@ previous_time = datetime.datetime.now()
 sensor_log_data = []
 estimates_log_data = []
 
+empty_array_1 = []
+empty_array_2 = []
+counter = 0
 
 def arduino_send_receive(estimate):
     global reset
@@ -53,8 +59,8 @@ def estimate(measurements):
 
     delta_t = diff.total_seconds()
     KF.predict(dt=delta_t)
-    KF.update(meas_value=measurements[3], mean_variance=0.002)  # her brukes avstandsmåling for å estimere tilstandene
-    KF.update(meas_value=measurements[2], mean_variance=0.002)  # her brukes akselerasjon i z-retning for å estimere tilstandene
+    KF.update(meas_value=measurements[3], mean_variance=0.015)  # her brukes avstandsmåling for å estimere tilstandene
+    #KF.update(meas_value=measurements[2], mean_variance=0.015)  # her brukes akselerasjon i z-retning for å estimere tilstandene
 
     estimates = KF.pos
     #log_measurements_and_estimates(delta_t, estimates, measurements)
@@ -82,10 +88,31 @@ def arduino_has_been_reset():
         reset = False
 
 
-while True:
+while counter <= 100:
+    #global counter
     sensor_values = arduino_send_receive(KF.pos)
-    print("raw sensor: ", sensor_values, " Estimates: ", KF.pos)
+    #print("raw sensor: ", sensor_values[3], " Estimates: ", KF.pos)
+    print(sensor_values[3])
+    empty_array_1.append(KF.pos)
+    empty_array_2.append(sensor_values[3])
+    # Set up plot to call animate() function periodically
     if sensor_values is not None:
         estimate(sensor_values)
     else:
         arduino_has_been_reset()
+
+    counter += 1
+
+
+
+
+
+
+plt.close(0); plt.figure(0)
+
+plt.plot(empty_array_1, 'r')
+plt.plot(empty_array_2, 'b')
+
+plt.show()
+
+

@@ -3,20 +3,21 @@ import numpy as np
 class KF:
     def __init__(self, initial_x: float,
                  initial_v: float,
+                 initial_a: float,
                  accel_variance: float) -> None:
-        self._x = np. array([initial_x, initial_v])
+        self._x = np. array([initial_x, initial_v, initial_a])
         self._accel_variance = accel_variance
 
-        self._P = np.eye(2)
+        self._P = np.eye(3)
 
     def predict(self, dt: float) -> None:
-        # x = F x
-        # P = F P Ft + G Gt a
-        F = np.array([[1, dt], [0, 1]])
-        new_x = F.dot(self._x)
+        # x = A x
+        # P = A P At + G Gt a
+        A = np.array([[1, dt, dt**2/2], [0, 1, dt], [0, 0, dt]])
+        new_x = A.dot(self._x)
 
-        G = np.array([0.5 * dt**2, dt]).reshape([2, 1])
-        new_P = F.dot(self._P).dot(F.T) + G.dot(G.T) * self._accel_variance
+        G = np.array([dt**3/6, dt**2/2, dt]).reshape([3, 1])
+        new_P = A.dot(self._P).dot(A.T) + G.dot(G.T) * self._accel_variance
 
         self._P = new_P
         self._x = new_x
@@ -27,7 +28,7 @@ class KF:
         # K = P Ht S^-1
         # x = x + K y
         # P = (I - K H) * P
-        H = np.array([1, 0]).reshape((1, 2))
+        H = np.array([1, 0, 0]).reshape((1, 3))
 
         z = np.array([meas_value])
         R = np.array([mean_variance])
@@ -38,7 +39,7 @@ class KF:
         K = self._P.dot(H.T).dot(np.linalg.inv(S))
 
         new_x = self._x + K.dot(y)
-        new_P = (np.eye(2) - K.dot(H)).dot(self._P)
+        new_P = (np.eye(3) - K.dot(H)).dot(self._P)
 
         self._P = new_P
         self._x = new_x
