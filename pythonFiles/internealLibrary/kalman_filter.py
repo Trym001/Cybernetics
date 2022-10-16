@@ -22,27 +22,29 @@ class KF:
         self._P = new_P
         self._x = new_x
 
-    def update(self, meas_value: float, mean_variance: float):
+    def update(self, meas_value: float, meas_value2: float, mean_variance: float):
         # y = z - H x
         # S = H P Ht + R
         # K = P Ht S^-1
         # x = x + K y
         # P = (I - K H) * P
-        H = np.array([1, 0, 0]).reshape((1, 3))
+        for i in range(2):
 
-        z = np.array([meas_value])
-        R = np.array([mean_variance])
+            H = np.array([1, 0, 0]).reshape((1, 3)) if i == 0 else np.array([0, 0, 1]).reshape((1, 3))
 
-        y = z - H.dot(self._x)
-        S = H.dot(self._P).dot(H.T) + R
+            z = np.array([meas_value]) if i == 0 else np.array([meas_value2])
+            R = np.array([mean_variance])
 
-        K = self._P.dot(H.T).dot(np.linalg.inv(S))
+            y = z - H.dot(self._x)
+            S = H.dot(self._P).dot(H.T) + R
 
-        new_x = self._x + K.dot(y)
-        new_P = (np.eye(3) - K.dot(H)).dot(self._P)
+            K = self._P.dot(H.T).dot(np.linalg.inv(S))
 
-        self._P = new_P
-        self._x = new_x
+            new_x = self._x + K.dot(y)
+            new_P = (np.eye(3) - K.dot(H)).dot(self._P)
+
+            self._P = new_P
+            self._x = new_x
 
     @property
     def cov(self) -> np.array:

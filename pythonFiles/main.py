@@ -59,7 +59,7 @@ def estimate(measurements):
 
     delta_t = diff.total_seconds()
     KF.predict(dt=delta_t)
-    KF.update(meas_value=measurements[3], mean_variance=0.015)  # her brukes avstandsmåling for å estimere tilstandene
+    KF.update(meas_value=measurements[3], meas_value2=measurements[2], mean_variance=0.015)  # her brukes avstandsmåling for å estimere tilstandene
     #KF.update(meas_value=measurements[2], mean_variance=0.015)  # her brukes akselerasjon i z-retning for å estimere tilstandene
 
     estimates = KF.pos
