@@ -84,6 +84,7 @@ def arduino_has_been_reset():
 
 while True:
     sensor_values = arduino_send_receive(KF.pos)
+    print("raw sensor: ", sensor_values, " Estimates: ", KF.pos)
     if sensor_values is not None:
         estimate(sensor_values)
     else:
