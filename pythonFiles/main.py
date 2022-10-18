@@ -94,7 +94,7 @@ while counter < 500:
     #global counter
     sensor_values = arduino_send_receive(KF.pos)
     #print("raw sensor: ", sensor_values[3], " Estimates: ", KF.pos)
-    print(sensor_values[3])
+    #print(sensor_values[3])
     empty_array_1.append(KF.pos)
     empty_array_2.append(sensor_values[3])
     acc_array.append(KF.acc)
@@ -113,12 +113,17 @@ while counter < 500:
 
 
 plt.close(0); plt.figure(0)
-plt.subplot(2,1,1)
+#plt.subplot(2,1,1)
 plt.plot(empty_array_1, 'r')
 plt.plot(empty_array_2, 'b')
-plt.subplot(2,1,2)
-plt.plot(acc_array, 'r')
-plt.plot(acc_array2, 'b')
+plt.grid(True)
+#plt.subplot(2,1,2)
+#plt.plot(acc_array, 'r')
+#plt.plot(acc_array2, 'b')
+#plt.grid(True)
+#print("Predited",empty_array_1)
+#t("Distance",empty_array_2)
+#print(" Accel", acc_array2)
 
 plt.show()
 

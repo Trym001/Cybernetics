@@ -33,10 +33,10 @@ class KF:
         self._x.reshape((3, 1))
         for i in range(2):
 
-            H = np.array([1, 0, 0]).reshape((1, 3)) # if i == 0 else np.array([0, 0, 1]).reshape((1, 3))
+            H = np.array([1, 0, 0]).reshape((1, 3))  #if i == 0 else np.array([0, 0, 1]).reshape((1, 3))
 
-            z = np.array([meas_value]) # if i == 0 else np.array([meas_value2])
-            R = np.array([mean_variance])
+            z = np.array([meas_value])  #if i == 0 else np.array([meas_value2])
+            R = np.array([mean_variance]) #if i == 0 else np.array([meas_value2])
 
             y = z - H.dot(self._x)
             S = H.dot(self._P).dot(H.T) + R
