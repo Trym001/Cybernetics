@@ -1,5 +1,8 @@
 import numpy as np
 
+std_pos = 91.6#/200
+std_acc = 0.22#/200
+
 class KF:
     def __init__(self, initial_x: float,
                  initial_v: float,
@@ -18,13 +21,15 @@ class KF:
                       [0, 0, 1]])
         new_x = A.dot(self._x)
 
-        G = np.array([dt**3/6, dt**2/2, dt]).reshape([3, 1])
-        new_P = A.dot(self._P).dot(A.T) + G.dot(G.T) * self._accel_variance
+        Q = np.array([[std_pos**2, 0, std_pos*std_acc],
+                      [         0, 0,               0],
+                 [std_acc*std_pos, 0,      std_acc**2]])
+        new_P = A.dot(self._P).dot(A.T) + Q# * self._accel_variance
 
         self._P = new_P
         self._x = new_x
 
-    def update(self, meas_value: float, meas_value2: float, mean_variance: float):
+    def update(self, meas_value: float, meas_value2: float, mean_variance: float, mean_variance2: float):
         # y = z - H x
         # S = H P Ht + R
         # K = P Ht S^-1
@@ -33,10 +38,10 @@ class KF:
         self._x.reshape((3, 1))
         for i in range(2):
 
-            H = np.array([1, 0, 0]).reshape((1, 3))  #if i == 0 else np.array([0, 0, 1]).reshape((1, 3))
+            H = np.array([1, 0, 0]).reshape((1, 3))  if i == 0 else np.array([0, 0, 1]).reshape((1, 3))
 
-            z = np.array([meas_value])  #if i == 0 else np.array([meas_value2])
-            R = np.array([mean_variance]) #if i == 0 else np.array([meas_value2])
+            z = np.array([meas_value])  if i == 0 else np.array([meas_value2])
+            R = np.array([mean_variance]) if i == 0 else np.array([meas_value2])
 
             y = z - H.dot(self._x)
             S = H.dot(self._P).dot(H.T) + R

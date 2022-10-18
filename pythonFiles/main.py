@@ -32,6 +32,7 @@ acc_array = []
 acc_array2 = []
 counter = 0
 
+
 def arduino_send_receive(estimate):
     global reset
     global previous_time
@@ -61,7 +62,7 @@ def estimate(measurements):
 
     delta_t = diff.total_seconds()
     KF.predict(dt=delta_t)
-    KF.update(meas_value=measurements[3], meas_value2=measurements[2], mean_variance=0.015)  # her brukes avstandsmåling for å estimere tilstandene
+    KF.update(meas_value=measurements[3], meas_value2=measurements[2], mean_variance2=0.015, mean_variance=1.9097)  # her brukes avstandsmåling for å estimere tilstandene
     #KF.update(meas_value=measurements[2], mean_variance=0.015)  # her brukes akselerasjon i z-retning for å estimere tilstandene
 
     estimates = KF.pos
@@ -107,20 +108,21 @@ while counter < 500:
 
     counter += 1
 
-
+print(np.std(empty_array_2))
+print(np.std(acc_array2))
 
 
 
 
 plt.close(0); plt.figure(0)
-#plt.subplot(2,1,1)
+plt.subplot(2,1,1)
 plt.plot(empty_array_1, 'r')
 plt.plot(empty_array_2, 'b')
 plt.grid(True)
-#plt.subplot(2,1,2)
-#plt.plot(acc_array, 'r')
-#plt.plot(acc_array2, 'b')
-#plt.grid(True)
+plt.subplot(2,1,2)
+plt.plot(acc_array, 'r')
+plt.plot(acc_array2, 'b')
+plt.grid(True)
 #print("Predited",empty_array_1)
 #t("Distance",empty_array_2)
 #print(" Accel", acc_array2)
