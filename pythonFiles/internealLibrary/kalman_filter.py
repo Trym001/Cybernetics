@@ -1,7 +1,7 @@
 import numpy as np
 
-std_pos = 91.6#/200
-std_acc = 0.22#/200
+std_pos = 91.6/200
+std_acc = 0.22/200
 
 class KF:
     def __init__(self, initial_x: float,
