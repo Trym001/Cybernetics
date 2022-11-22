@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cb0bc4f5-1bab-4d1b-aec8-a333e1aa68d1" name="Changes" comment="adda modul 1 power point">
-      <change afterPath="$PROJECT_DIR$/.idea/Cybernetics.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="1def5ada-086e-422a-81e0-930f61c38895" name="Changes" comment="la te bildene">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,8 +51,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\zaime\Cybernetics\learning material" />
       <recent name="C:\Users\zaime\Cybernetics" />
+      <recent name="C:\Users\zaime\Cybernetics\learning material" />
     </key>
   </component>
   <component name="RunManager" selected="Python.kalman_filter">
@@ -328,8 +324,8 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Cybernetics$main.coverage" NAME="main Coverage Results" MODIFIED="1666607594349" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pythonFiles" />
-    <SUITE FILE_PATH="coverage/Cybernetics$kalman_filter.coverage" NAME="kalman_filter Coverage Results" MODIFIED="1666607418826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pythonFiles/internealLibrary" />
-    <SUITE FILE_PATH="coverage/Cybernetics$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1665924290977" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../Downloads" />
     <SUITE FILE_PATH="coverage/Cybernetics$test1.coverage" NAME="test1 Coverage Results" MODIFIED="1665928849507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Cybernetics$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1665924290977" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../Downloads" />
+    <SUITE FILE_PATH="coverage/Cybernetics$kalman_filter.coverage" NAME="kalman_filter Coverage Results" MODIFIED="1666607418826" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/pythonFiles/internealLibrary" />
   </component>
 </project>
