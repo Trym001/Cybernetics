@@ -1,0 +1,1 @@
+Extract the two folders "fusion" and "libraries" to C:\Users\<USER>\Documents\Arduino
