@@ -14,8 +14,6 @@ class KF:
         self._P = np.eye(3)
 
     def predict(self, dt: float) -> None:
-        # x = A x
-        # P = A P At + G Gt a
         A = np.array([[1, dt, dt**2/2],
                       [0, 1, dt],
                       [0, 0, 1]])
@@ -30,11 +28,6 @@ class KF:
         self._x = new_x
 
     def update(self, meas_value: float, meas_value2: float, mean_variance: float, mean_variance2: float):
-        # y = z - H x
-        # S = H P Ht + R
-        # K = P Ht S^-1
-        # x = x + K y
-        # P = (I - K H) * P
         self._x.reshape((3, 1))
         for i in range(2):
 

@@ -3,7 +3,7 @@ import time
 from socket import *
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+
 
 
 from pythonFiles.internealLibrary.kalman_filter import KF
@@ -26,10 +26,10 @@ previous_time = datetime.datetime.now()
 sensor_log_data = []
 estimates_log_data = []
 
-empty_array_1 = []
-empty_array_2 = []
-acc_array = []
-acc_array2 = []
+Pos_predict = []
+Pos_sensor = []
+Acc_predict = []
+Acc_sensor = []
 counter = 0
 
 
@@ -63,44 +63,23 @@ def estimate(measurements):
     delta_t = diff.total_seconds()
     KF.predict(dt=delta_t)
     KF.update(meas_value=measurements[3], meas_value2=measurements[2], mean_variance2=0.015, mean_variance=1.9097)  # her brukes avstandsmåling for å estimere tilstandene
-    #KF.update(meas_value=measurements[2], mean_variance=0.015)  # her brukes akselerasjon i z-retning for å estimere tilstandene
 
     estimates = KF.pos
-    #log_measurements_and_estimates(delta_t, estimates, measurements)
-
     return estimates
-
-
-def log_measurements_and_estimates(delta_t, estimates, measurements):
-    sensor_log_data.append([delta_t, measurements[0], measurements[1], measurements[2], measurements[3]])
-    estimates_log_data.append([estimates.item(0, 0), estimates.item(1, 0), estimates.item(2, 0)])
-
-    if len(sensor_log_data) > 100:
-        np.savetxt('measures.csv', sensor_log_data, delimiter=',')
-        np.savetxt('estimates.csv', estimates_log_data, delimiter=',')
-        sensor_log_data.clear()
-        estimates_log_data.clear()
-
 
 def arduino_has_been_reset():
     global reset
     if reset:
         print("Arduino is offline.. Resetting kalman filter")
-        #global f
-        #f = Fusion()
         reset = False
 
-
+#collecting data from sensor/kalman filter
 while counter < 500:
-    #global counter
     sensor_values = arduino_send_receive(KF.pos)
-    #print("raw sensor: ", sensor_values[3], " Estimates: ", KF.pos)
-    #print(sensor_values[3])
-    empty_array_1.append(KF.pos)
-    empty_array_2.append(sensor_values[3])
-    acc_array.append(KF.acc)
-    acc_array2.append(sensor_values[2])
-    # Set up plot to call animate() function periodically
+    Pos_predict.append(KF.pos)
+    Pos_sensor.append(sensor_values[3])
+    Acc_predict.append(KF.acc)
+    Acc_sensor.append(sensor_values[2])
     if sensor_values is not None:
         estimate(sensor_values)
     else:
@@ -108,28 +87,25 @@ while counter < 500:
 
     counter += 1
 
-print(np.std(empty_array_2))
-print(np.std(acc_array2))
+#print(np.std(Pos_sensor))
+#print(np.std(Acc_sensor))
 
 
 
-
+#plotting data
 plt.close(0); plt.figure(0)
 plt.subplot(2,1,1)
-plt.plot(empty_array_1, 'r', label = 'Predicted')
-plt.plot(empty_array_2, 'b', label = 'Measured')
+plt.plot(Pos_predict, 'r', label ='Predicted')
+plt.plot(Pos_sensor, 'b', label ='Measured')
 plt.grid(True)
 plt.xlabel("Position")
 plt.legend(loc='lower right')
 plt.subplot(2,1,2)
-plt.plot(acc_array, 'r', label = 'Predicted' )
-plt.plot(acc_array2, 'b', label = 'Measured')
+plt.plot(Acc_predict, 'r', label ='Predicted')
+plt.plot(Acc_sensor, 'b', label ='Measured')
 plt.xlabel('Acceleration')
 plt.grid(True)
 plt.legend(loc='lower right')
-#print("Predited",empty_array_1)
-#t("Distance",empty_array_2)
-#print(" Accel", acc_array2)
 
 plt.tight_layout()
 plt.show()
